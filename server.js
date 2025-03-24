@@ -13,6 +13,11 @@ const con = mysql.createConnection({
     password: 'jxEhANMr7a'
 });
 
+con.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected to MySQL server!");
+});
+
 
 app.get("/scrape", (req, res) => {
     const cityJson = req.query;
@@ -104,6 +109,7 @@ class Scrape {
                 console.log(adLocation);
                 console.log(adIsFurnished);
                 console.log(a); // Link
+                this.insertData(adTitle, adPrice, adLocation, adIsFurnished, a);
                 console.log("");
             }
             catch (e) {
@@ -125,6 +131,11 @@ class Scrape {
 
     hamiltonScrape() {
         console.log("hamiltonScrape");
+    }
+
+    insertData(title, price, location, isFurnished, link) {
+        const sql = 'INSERT INTO `advertisements` (`title`, `price`, `location`, `isfurnished`, `link`) VALUES ?';
+        con.query(sql, [title, price, location, isFurnished, link]);
     }
 }
 

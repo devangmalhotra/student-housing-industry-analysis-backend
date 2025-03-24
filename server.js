@@ -45,7 +45,7 @@ class Scrape {
     }
 
     async initialize() {
-        this.browser = await puppeteer.launch({headless: false});
+        this.browser = await puppeteer.launch({headless: true});
         this.page = await this.browser.newPage();
         await this.page.setViewport({width: 1280, height: 800});
         //await this.page.goto("https://pptr.dev/guides/headless-modes");
@@ -91,7 +91,6 @@ class Scrape {
                         if (candidateTitle == "Furnished") {
                             const isFurnishedElement = await i.$('.sc-578235a5-0.hsLMPB');
                             adIsFurnished = await isFurnishedElement.evaluate(el => el.innerHTML);
-                            console.log(adIsFurnished);
                         }
                     }
                 }
@@ -99,11 +98,12 @@ class Scrape {
                     //console.log(e);
                 }
                 
-
+                
                 console.log(adTitle);
                 console.log(adPrice);
                 console.log(adLocation);
                 console.log(adIsFurnished);
+                console.log(a); // Link
                 console.log("");
             }
             catch (e) {

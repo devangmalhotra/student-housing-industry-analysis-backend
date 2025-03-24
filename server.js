@@ -10,7 +10,8 @@ app.use(cors());
 const con = mysql.createConnection({
     host: 'sql12.freesqldatabase.com', 
     user: 'sql12768879', 
-    password: 'jxEhANMr7a'
+    password: 'jxEhANMr7a', 
+    database: 'sql12768879',
 });
 
 con.connect(function(err) {
@@ -22,7 +23,7 @@ con.connect(function(err) {
 app.get("/scrape", (req, res) => {
     const cityJson = req.query;
     const cityToScrape = cityJson.city;
-    console.log(cityToScrape);
+    //console.log(cityToScrape);
     res.send({hello: 'hello world'});
     
     const scrapeObj = new Scrape(cityToScrape);
@@ -60,7 +61,7 @@ class Scrape {
     
     async waterlooScrape() {
         let linksArr = [];
-        console.log("waterlooScrape"); 
+        console.log("Scraping Waterloo data..."); 
 
         //Kijiji
         await this.page.goto("https://www.kijiji.ca/b-canada/student-housing-waterloo/k0l0?dc=true&view=list");
@@ -111,6 +112,7 @@ class Scrape {
                 console.log(a); // Link
                 this.insertData(adTitle, adPrice, adLocation, adIsFurnished, a);
                 console.log("");
+                break;
             }
             catch (e) {
                 //console.log(e);
@@ -134,8 +136,11 @@ class Scrape {
     }
 
     insertData(title, price, location, isFurnished, link) {
-        const sql = 'INSERT INTO `advertisements` (`title`, `price`, `location`, `isfurnished`, `link`) VALUES ?';
-        con.query(sql, [title, price, location, isFurnished, link]);
+        const sql = 'INSERT INTO `advertisements` (`title`, `price`, `location`, `isfurnished`, `link`) VALUES (?, ?, ?, ?, ?)';
+        con.query(sql, [title, price, location, isFurnished, link], (err, results, fields) => {
+            if (err) throw err;
+            console.log(`Inserted ${title}`);
+        });
     }
 }
 

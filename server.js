@@ -60,10 +60,10 @@ class Scrape {
     }
     
     async waterlooScrape() {
-        let linksArr = [];
         console.log("Scraping Waterloo data..."); 
 
-        //Kijiji
+        //Kijiji, Places4Students
+        let linksArr = [];
         await this.page.goto("https://www.kijiji.ca/b-canada/student-housing-waterloo/k0l0?dc=true&view=list");
         const adsResultsDiv = await this.page.$('[data-testid=srp-search-list]');
         const postingsList = await adsResultsDiv.$$("li");
@@ -101,30 +101,16 @@ class Scrape {
                     }
                 }
                 catch(e) {
-                    //console.log(e);
                 }
-                
-                
-                console.log(adTitle);
-                console.log(adPrice);
-                console.log(adLocation);
-                console.log(adIsFurnished);
-                console.log(a); // Link
+
                 this.insertData(adTitle, adPrice, adLocation, adIsFurnished, a);
-                console.log("");
-                break;
             }
             catch (e) {
-                //console.log(e);
-                //break;
             }
         }
 
-        //console.log(linksArr);
-
-        //const price = await postingsList[0].$('[data-testid=listing-price]')
-        //console.log(await price.evaluate(el => el.innerHTML, price));
         await this.browser.close()
+        console.log("Finished scraping Waterloo Data...")
     }
 
     torontoScrape() {

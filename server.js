@@ -51,11 +51,9 @@ class Scrape {
     }
 
     async initialize() {
-        this.browser = await puppeteer.launch({headless: true});
+        this.browser = await puppeteer.launch({headless: false});
         this.page = await this.browser.newPage();
         await this.page.setViewport({width: 1280, height: 800});
-        //await this.page.goto("https://pptr.dev/guides/headless-modes");
-        //await this.browser.close();
         eval(`this.${this.city}Scrape()`);
     }
     
@@ -64,7 +62,7 @@ class Scrape {
 
         //Kijiji
         let linksArr = [];
-        await this.page.goto("https://www.kijiji.ca/b-canada/student-housing-waterloo/k0l0?dc=true&view=list");
+        /* await this.page.goto("https://www.kijiji.ca/b-canada/student-housing-waterloo/k0l0?dc=true&view=list");
         const adsResultsDiv = await this.page.$('[data-testid=srp-search-list]');
         const postingsList = await adsResultsDiv.$$("li");
         //Collecting all links
@@ -107,10 +105,18 @@ class Scrape {
             }
             catch (e) {
             }
-        }
+        } */
 
-        //Places4Students
+        //Places4Students (Wilfrid Laurier University) (await resolves a promise)
         linksArr = [];
+        await this.page.goto("https://www.places4students.com/Places/PropertyListings?SchoolID=j9CaTYeszhs=");
+
+        //Accepting disclaimer
+        const agreeBtn = await this.page.$(".btn.btn-primary");
+        agreeBtn.click();
+
+        const listingsArr = await this.page.waitForSelector(".featured");
+        console.log(listingsArr);
 
         await this.browser.close()
         console.log("Finished scraping Waterloo Data...")

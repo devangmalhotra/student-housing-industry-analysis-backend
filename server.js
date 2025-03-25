@@ -59,10 +59,10 @@ class Scrape {
         eval(`this.${this.city}Scrape()`);
     }
     
-    async waterlooScrape() {
+    async waterlooScrape() { //Kijiji, Places4Students
         console.log("Scraping Waterloo data..."); 
 
-        //Kijiji, Places4Students
+        //Kijiji
         let linksArr = [];
         await this.page.goto("https://www.kijiji.ca/b-canada/student-housing-waterloo/k0l0?dc=true&view=list");
         const adsResultsDiv = await this.page.$('[data-testid=srp-search-list]');
@@ -108,6 +108,9 @@ class Scrape {
             catch (e) {
             }
         }
+
+        //Places4Students
+        linksArr = [];
 
         await this.browser.close()
         console.log("Finished scraping Waterloo Data...")

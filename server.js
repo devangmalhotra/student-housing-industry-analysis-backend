@@ -115,8 +115,10 @@ class Scrape {
         const agreeBtn = await this.page.$(".btn.btn-primary");
         agreeBtn.click();
 
-        const listingsArr = await this.page.waitForSelector(".featured");
-        console.log(listingsArr);
+        await this.page.waitForSelector(".featured");
+        const listingsArr = await this.page.$$(".featured");
+        
+        console.log(listingsArr.length);
 
         await this.browser.close()
         console.log("Finished scraping Waterloo Data...")

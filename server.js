@@ -120,8 +120,8 @@ class Scrape {
         
         for (const i of listingsArr) {
             const listingLinkContainer = await i.$('.listing-title');
-            const listingLinkElement = await listingLinkContainer.$('a');
-            console.log(listingLinkElement);
+            const listingLink = await listingLinkContainer.$eval('a', el => el.href);
+            console.log(listingLink);
         }
 
         await this.browser.close()

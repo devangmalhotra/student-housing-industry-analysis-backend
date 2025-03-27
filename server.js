@@ -121,11 +121,15 @@ class Scrape {
         for (const i of listingsArr) {
             const listingLinkContainer = await i.$('.listing-title');
             const listingLink = await listingLinkContainer.$eval('a', el => el.href);
-            console.log(listingLink);
+            linksArr.push(listingLink);
         }
 
-        await this.browser.close()
-        console.log("Finished scraping Waterloo Data...")
+        for (const a of linksArr) {
+            await this.page.goto(a);
+        }
+
+        await this.browser.close();
+        console.log("Finished scraping Waterloo Data...");
     }
 
     torontoScrape() {

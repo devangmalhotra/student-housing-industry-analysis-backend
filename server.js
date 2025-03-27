@@ -118,7 +118,11 @@ class Scrape {
         await this.page.waitForSelector(".featured");
         const listingsArr = await this.page.$$(".featured");
         
-        console.log(listingsArr.length);
+        for (const i of listingsArr) {
+            const listingLinkContainer = await i.$('.listing-title');
+            const listingLinkElement = await listingLinkContainer.$('a');
+            console.log(listingLinkElement);
+        }
 
         await this.browser.close()
         console.log("Finished scraping Waterloo Data...")

@@ -126,9 +126,13 @@ class Scrape {
 
         for (const a of linksArr) {
             await this.page.goto(a);
+            const listingPriceText = await this.page.$eval('#MainContent_trRental', el => el.innerText);
+            const listingPrice = listingPriceText.split("$")[1].split(".");
+            console.log(listingPrice);
+            break;
         }
 
-        await this.browser.close();
+        //await this.browser.close();
         console.log("Finished scraping Waterloo Data...");
     }
 

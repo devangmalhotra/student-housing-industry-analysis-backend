@@ -58,12 +58,12 @@ class Scrape {
     }
 
     async getKijijiInfo(searchPageLink) {
-        //Kijiji
         let linksArr = [];
-        await this.page.goto("https://www.kijiji.ca/b-canada/student-housing-waterloo/k0l0?dc=true&view=list");
+        await this.page.goto(searchPageLink);
         const adsResultsDiv = await this.page.$('[data-testid=srp-search-list]');
         const postingsList = await adsResultsDiv.$$("li");
-        //Collecting all links
+        
+        // Collecting all links
         for (const i of postingsList) {
             try {
                 const anchorElement = await i.$('[data-testid=listing-link]');
@@ -74,16 +74,23 @@ class Scrape {
                 
             }
         }
-        //Accessing all links
+        // Accessing all links
         for (const a of linksArr) {
             try {
                 await this.page.goto(a);
-                const titleElement = await this.page.$('.sc-9d9a3b6-0.iacITa')
-                const adTitle = (await titleElement.evaluate(el => el.innerHTML)).trim();
+
+                // Getting listing title
+                const adTitle = (await this.page.$eval('.sc-9d9a3b6-0.cwhKRe', el => el.innerText)).trim();
+
+                // Getting listing price
                 const priceElement = await this.page.$('[data-testid=vip-price]');
                 const adPrice = (await priceElement.evaluate(el => el.innerHTML)).trim().replace(",", "").replace("$", "");
+
+                // Getting listing location 
                 const locationElement = await this.page.$('::-p-xpath(//*[@id="base-layout-main-wrapper"]/div[1]/div[2]/section/div/div/div[1]/div/div/div[2]/div/div/button)');
                 const adLocation = (await locationElement.evaluate(el => el.innerHTML)).trim();
+
+                // Getting isFurnished
                 let adIsFurnished;
                 const isFurnishedCandidates = await this.page.$$('.sc-eb45309b-0.iNzWBi');
                 try {
@@ -97,24 +104,27 @@ class Scrape {
                     }
                 }
                 catch(e) {
+                    
                 }
 
                 this.insertData(adTitle, adPrice, adLocation, adIsFurnished, a);
             }
             catch (e) {
+                console.log(e);
+                break;
             }
         }
     }
 
     async getPlaces4StudentsInfo(searchPageLink) {
         //Places4Students (Wilfrid Laurier University) (await resolves a promise)
-        linksArr = [];
+        let linksArr = [];
         let listingTitle;
         let listingPrice;
         let listingLocation;
         let listingIsFurnished = "";
 
-        await this.page.goto("https://www.places4students.com/Places/PropertyListings?SchoolID=j9CaTYeszhs=");
+        await this.page.goto(searchPageLink);
 
         //Accepting disclaimer
         const agreeBtn = await this.page.$(".btn.btn-primary");
@@ -151,16 +161,15 @@ class Scrape {
             const listingLocationText = await this.page.$eval('#MainContent_trCity', el => el.innerText);
             listingLocation = listingLocationText.split("\n")[1].trim();
 
-            console.log(listingTitle);
-            console.log(listingPrice);
-            console.log(listingLocation);
-            console.log("");
+            // Inserting into MySQL DB
+            this.insertData(listingTitle, listingPrice, listingLocation, listingIsFurnished, a);
         }
     }
     
     async waterlooScrape() { //Kijiji, Places4Students
         console.log("Scraping Waterloo data...");  
-
+        await this.getKijijiInfo("https://www.kijiji.ca/b-canada/student-housing-waterloo/k0l0?dc=true&view=list");
+        await this.getPlaces4StudentsInfo("https://www.places4students.com/Places/PropertyListings?SchoolID=j9CaTYeszhs=");
         
         
 

@@ -51,7 +51,7 @@ class Scrape {
     }
 
     async initialize() {
-        this.browser = await puppeteer.launch({headless: false});
+        this.browser = await puppeteer.launch({headless: true});
         this.page = await this.browser.newPage();
         await this.page.setViewport({width: 1280, height: 800});
         eval(`this.${this.city}Scrape()`);

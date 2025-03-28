@@ -109,6 +109,12 @@ class Scrape {
 
         //Places4Students (Wilfrid Laurier University) (await resolves a promise)
         linksArr = [];
+        let listingTitle;
+        let listingPrice;
+        let listingLocation;
+        let listingIsFurnished;
+        let listingLink;
+
         await this.page.goto("https://www.places4students.com/Places/PropertyListings?SchoolID=j9CaTYeszhs=");
 
         //Accepting disclaimer
@@ -120,26 +126,36 @@ class Scrape {
         
         for (const i of listingsArr) {
             const listingLinkContainer = await i.$('.listing-title');
-            const listingLink = await listingLinkContainer.$eval('a', el => el.href);
+            listingLink = await listingLinkContainer.$eval('a', el => el.href);
             linksArr.push(listingLink);
         }
 
         for (const a of linksArr) {
             await this.page.goto(a);
 
+            // Getting title
+            listingTitle = await this.page.$eval("#MainContent_detailsTitle", el => el.innerText);
+
+            // Getting price
             try {
                 const listingPriceText = await this.page.$eval('#MainContent_trRental', el => el.innerText);
-                const listingPrice = listingPriceText.split("$")[1].split(".")[0].replace(",", "").trim();
-                console.log(listingPrice);
+                listingPrice = listingPriceText.split("$")[1].split(".")[0].replace(",", "").trim();
             } 
             catch {
                 const listingPriceText = await this.page.$eval('.element.atStart.ui-accordion-content.ui-helper-reset.ui-widget-content.ui-corner-bottom.ui-accordion-content-active', el => el.innerText);
-                const listingPrice = listingPriceText.split("\n")[1].replace("$", "").split(".")[0].replace(",", "").trim();
-                console.log(listingPrice);
+                listingPrice = listingPriceText.split("\n")[1].replace("$", "").split(".")[0].replace(",", "").trim();
             }
-        }
 
-        //await this.browser.close();
+            // Getting location
+            
+
+            console.log(listingTitle);
+            console.log(listingPrice);
+            console.log("");
+        }
+        
+
+        await this.browser.close();
         console.log("Finished scraping Waterloo Data...");
     }
 

@@ -112,7 +112,7 @@ class Scrape {
         let listingTitle;
         let listingPrice;
         let listingLocation;
-        let listingIsFurnished;
+        let listingIsFurnished = "";
         let listingLink;
 
         await this.page.goto("https://www.places4students.com/Places/PropertyListings?SchoolID=j9CaTYeszhs=");
@@ -147,10 +147,12 @@ class Scrape {
             }
 
             // Getting location
-            
+            const listingLocationText = await this.page.$eval('#MainContent_trCity', el => el.innerText);
+            listingLocation = listingLocationText.split("\n")[1].trim();
 
             console.log(listingTitle);
             console.log(listingPrice);
+            console.log(listingLocation);
             console.log("");
         }
         

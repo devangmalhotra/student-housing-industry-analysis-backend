@@ -56,13 +56,11 @@ class Scrape {
         await this.page.setViewport({width: 1280, height: 800});
         eval(`this.${this.city}Scrape()`);
     }
-    
-    async waterlooScrape() { //Kijiji, Places4Students
-        console.log("Scraping Waterloo data..."); 
 
+    async getKijijiInfo(searchPageLink) {
         //Kijiji
         let linksArr = [];
-        /* await this.page.goto("https://www.kijiji.ca/b-canada/student-housing-waterloo/k0l0?dc=true&view=list");
+        await this.page.goto("https://www.kijiji.ca/b-canada/student-housing-waterloo/k0l0?dc=true&view=list");
         const adsResultsDiv = await this.page.$('[data-testid=srp-search-list]');
         const postingsList = await adsResultsDiv.$$("li");
         //Collecting all links
@@ -105,15 +103,16 @@ class Scrape {
             }
             catch (e) {
             }
-        } */
+        }
+    }
 
+    async getPlaces4StudentsInfo(searchPageLink) {
         //Places4Students (Wilfrid Laurier University) (await resolves a promise)
         linksArr = [];
         let listingTitle;
         let listingPrice;
         let listingLocation;
         let listingIsFurnished = "";
-        let listingLink;
 
         await this.page.goto("https://www.places4students.com/Places/PropertyListings?SchoolID=j9CaTYeszhs=");
 
@@ -124,12 +123,14 @@ class Scrape {
         await this.page.waitForSelector(".featured");
         const listingsArr = await this.page.$$(".featured");
         
+        // Getting each link and storing in array
         for (const i of listingsArr) {
             const listingLinkContainer = await i.$('.listing-title');
-            listingLink = await listingLinkContainer.$eval('a', el => el.href);
+            const listingLink = await listingLinkContainer.$eval('a', el => el.href);
             linksArr.push(listingLink);
         }
 
+        // Traversing through each link
         for (const a of linksArr) {
             await this.page.goto(a);
 
@@ -155,6 +156,12 @@ class Scrape {
             console.log(listingLocation);
             console.log("");
         }
+    }
+    
+    async waterlooScrape() { //Kijiji, Places4Students
+        console.log("Scraping Waterloo data...");  
+
+        
         
 
         await this.browser.close();

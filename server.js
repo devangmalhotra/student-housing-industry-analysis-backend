@@ -126,9 +126,17 @@ class Scrape {
 
         for (const a of linksArr) {
             await this.page.goto(a);
-            const listingPriceText = await this.page.$eval('#MainContent_trRental', el => el.innerText);
-            const listingPrice = listingPriceText.split("$")[1].split(".")[0].trim();
-            console.log(listingPrice);
+
+            try {
+                const listingPriceText = await this.page.$eval('#MainContent_trRental', el => el.innerText);
+                const listingPrice = listingPriceText.split("$")[1].split(".")[0].replace(",", "").trim();
+                console.log(listingPrice);
+            } 
+            catch {
+                const listingPriceText = await this.page.$eval('.element.atStart.ui-accordion-content.ui-helper-reset.ui-widget-content.ui-corner-bottom.ui-accordion-content-active', el => el.innerText);
+                const listingPrice = listingPriceText.split("\n")[1].replace("$", "").split(".")[0].replace(",", "").trim();
+                console.log(listingPrice);
+            }
         }
 
         //await this.browser.close();

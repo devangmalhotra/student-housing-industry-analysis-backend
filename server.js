@@ -51,7 +51,7 @@ class Scrape {
     }
 
     async initialize() {
-        this.browser = await puppeteer.launch({headless: true});
+        this.browser = await puppeteer.launch({headless: false});
         this.page = await this.browser.newPage();
         await this.page.setViewport({width: 1280, height: 800});
         eval(`this.${this.city}Scrape()`);
@@ -60,10 +60,14 @@ class Scrape {
     async getKijijiInfo(searchPageLink) {
         let linksArr = [];
         await this.page.goto(searchPageLink);
-        const adsResultsDiv = await this.page.$('[data-testid=srp-search-list]');
-        const postingsList = await adsResultsDiv.$$("li");
+
+        // Collecting links for all pages
+        const resultLinksContainers = await this.page.$('[data-testid=pagination-list-item]');
+        console.log(resultLinksContainers.$eval(el => el.innerHTML));
         
         // Collecting all links
+        const adsResultsDiv = await this.page.$('[data-testid=srp-search-list]');
+        const postingsList = await adsResultsDiv.$$("li");
         for (const i of postingsList) {
             try {
                 const anchorElement = await i.$('[data-testid=listing-link]');
@@ -107,7 +111,7 @@ class Scrape {
                     
                 }
 
-                this.insertData(adTitle, adPrice, adLocation, adIsFurnished, a);
+                //this.insertData(adTitle, adPrice, adLocation, adIsFurnished, a, "Kijiji");
             }
             catch (e) {
                 console.log(e);
@@ -126,7 +130,7 @@ class Scrape {
 
         await this.page.goto(searchPageLink);
 
-        //Accepting disclaimer
+        // Accepting disclaimer
         const agreeBtn = await this.page.$(".btn.btn-primary");
         agreeBtn.click();
 
@@ -162,7 +166,7 @@ class Scrape {
             listingLocation = listingLocationText.split("\n")[1].trim();
 
             // Inserting into MySQL DB
-            this.insertData(listingTitle, listingPrice, listingLocation, listingIsFurnished, a);
+            //this.insertData(listingTitle, listingPrice, listingLocation, listingIsFurnished, a, "Places4Students");
         }
     }
     
@@ -185,11 +189,11 @@ class Scrape {
         console.log("hamiltonScrape");
     }
 
-    insertData(title, price, location, isFurnished, link) {
+    insertData(title, price, location, isFurnished, link, platform) {
         const sql = 'INSERT INTO `advertisements` (`title`, `price`, `location`, `isfurnished`, `link`) VALUES (?, ?, ?, ?, ?)';
         con.query(sql, [title, price, location, isFurnished, link], (err, results, fields) => {
             if (err) throw err;
-            console.log(`Inserted ${title}`);
+            console.log(`Inserted ${platform} ${title}`);
         });
     }
 }

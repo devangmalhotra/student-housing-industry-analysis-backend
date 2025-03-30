@@ -39,8 +39,8 @@ app.get("/hamilton", (req, res) => {
     res.send({hello: 'hello world'});
 });
 
-app.listen(5000, () => {
-    console.log("Listening on port 5000...");
+app.listen(8000, () => {
+    console.log("Listening on port 8000...");
 });
 
 class Scrape {

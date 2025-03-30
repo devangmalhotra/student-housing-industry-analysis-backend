@@ -60,10 +60,16 @@ class Scrape {
     async getKijijiInfo(searchPageLink) {
         let linksArr = [];
         await this.page.goto(searchPageLink);
+        await this.page.evaluate('window.scrollTo(0, document.body.scrollHeight)');
 
         // Collecting links for all pages
-        const resultLinksContainers = await this.page.$('[data-testid=pagination-list-item]');
-        console.log(resultLinksContainers.$eval(el => el.innerHTML));
+        const resultLinksContainers = await this.page.$$('[data-testid=pagination-list-item]');
+        console.log(resultLinksContainers);
+
+        for (const i of resultLinksContainers) {
+            console.log(await i.$eval('[data-testid=pagination-link-item]', el => el.href));
+        }
+        //console.log(await resultLinksContainers[0].$eval('[data-testid=pagination-link-item]', el => el.href));
         
         // Collecting all links
         const adsResultsDiv = await this.page.$('[data-testid=srp-search-list]');

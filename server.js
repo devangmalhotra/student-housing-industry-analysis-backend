@@ -51,7 +51,7 @@ class Scrape {
     }
 
     async initialize() {
-        this.browser = await puppeteer.launch({headless: false});
+        this.browser = await puppeteer.launch({headless: true});
         this.page = await this.browser.newPage();
         await this.page.setViewport({width: 1280, height: 800});
         eval(`this.${this.city}Scrape()`);
@@ -60,12 +60,16 @@ class Scrape {
     async getKijijiInfo(searchPageLink) {
         let linksArr = [];
         await this.page.goto(searchPageLink);
+
+        // Scrolling to bottom of page to load elements
         await this.page.evaluate('window.scrollTo(0, document.body.scrollHeight)');
+        
+        await this.page.waitForSelector('[data-testid="pagination-list-item-selected"]');
 
         // Collecting links for all pages
         const resultLinksContainers = await this.page.$$('[data-testid=pagination-list-item]');
-        console.log(resultLinksContainers);
 
+        // Saving all result page links in an array
         for (const i of resultLinksContainers) {
             console.log(await i.$eval('[data-testid=pagination-link-item]', el => el.href));
         }

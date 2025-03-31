@@ -51,7 +51,7 @@ class Scrape {
     }
 
     async initialize() {
-        this.browser = await puppeteer.launch({headless: true});
+        this.browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox','--single-process', '--no-zygote'], ignoreHTTPSErrors: true });
         this.page = await this.browser.newPage();
         await this.page.setViewport({width: 1280, height: 800});
         eval(`this.${this.city}Scrape()`);
@@ -130,8 +130,11 @@ class Scrape {
         await this.page.goto(searchPageLink);
 
         // Accepting disclaimer
-        const agreeBtn = await this.page.$(".btn.btn-primary");
-        agreeBtn.click();
+        try{
+            const agreeBtn = await this.page.$(".btn.btn-primary");
+            agreeBtn.click();
+        } catch (e) {};
+        
 
         await this.page.waitForSelector(".featured");
         const listingsArr = await this.page.$$(".featured");

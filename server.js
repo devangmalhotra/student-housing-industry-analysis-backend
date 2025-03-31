@@ -57,6 +57,10 @@ class Scrape {
         eval(`this.${this.city}Scrape()`);
     }
 
+    async getResultPages(searchPageLink) {
+
+    }
+
     async getKijijiInfo(searchPageLink) {
         let linksArr = [];
         await this.page.goto(searchPageLink);
@@ -70,9 +74,12 @@ class Scrape {
         const resultLinksContainers = await this.page.$$('[data-testid=pagination-list-item]');
 
         // Saving all result page links in an array
+        const resultLinks = [];
         for (const i of resultLinksContainers) {
-            console.log(await i.$eval('[data-testid=pagination-link-item]', el => el.href));
-        }
+            const resultLink = await i.$eval('[data-testid=pagination-link-item]', el => el.href);
+            resultLinks.push(resultLink);
+        };
+        console.log(resultLinks);
         //console.log(await resultLinksContainers[0].$eval('[data-testid=pagination-link-item]', el => el.href));
         
         // Collecting all links
@@ -120,7 +127,7 @@ class Scrape {
                 catch(e) {
                     
                 }
-
+                console.log(adTitle, adPrice, adLocation, adIsFurnished, a, "Kijiji");
                 //this.insertData(adTitle, adPrice, adLocation, adIsFurnished, a, "Kijiji");
             }
             catch (e) {
@@ -128,6 +135,8 @@ class Scrape {
                 break;
             }
         }
+
+        
     }
 
     async getPlaces4StudentsInfo(searchPageLink) {

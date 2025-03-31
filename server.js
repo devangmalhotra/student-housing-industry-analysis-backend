@@ -108,8 +108,8 @@ class Scrape {
                 catch(e) {
                     
                 }
-                console.log(adTitle, adPrice, adLocation, adIsFurnished, a, "Kijiji");
-                //this.insertData(adTitle, adPrice, adLocation, adIsFurnished, a, "Kijiji");
+                //console.log(adTitle, adPrice, adLocation, adIsFurnished, a, "Kijiji");
+                this.insertData(adTitle, adPrice, adLocation, adIsFurnished, a, "Kijiji");
             }
             catch (e) {
                 console.log(e);
@@ -174,8 +174,8 @@ class Scrape {
             listingLocation = listingLocationText.split("\n")[1].trim();
 
             // Inserting into MySQL DB
-            //this.insertData(listingTitle, listingPrice, listingLocation, listingIsFurnished, a, "Places4Students");
-            console.log(listingTitle, listingPrice, listingLocation, listingIsFurnished, a, "Places4Students");
+            this.insertData(listingTitle, listingPrice, listingLocation, listingIsFurnished, a, "Places4Students");
+            //console.log(listingTitle, listingPrice, listingLocation, listingIsFurnished, a, "Places4Students");
 
             //Timeout
             await new Promise(r => setTimeout(r, 2000));

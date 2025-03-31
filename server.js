@@ -51,7 +51,7 @@ class Scrape {
     }
 
     async initialize() {
-        this.browser = await puppeteer.launch({headless: false});
+        this.browser = await puppeteer.launch({headless: true});
         this.page = await this.browser.newPage();
         await this.page.setViewport({width: 1280, height: 800});
         eval(`this.${this.city}Scrape()`);
@@ -166,6 +166,7 @@ class Scrape {
 
             // Inserting into MySQL DB
             //this.insertData(listingTitle, listingPrice, listingLocation, listingIsFurnished, a, "Places4Students");
+            console.log(listingTitle, listingPrice, listingLocation, listingIsFurnished, a, "Places4Students");
         }
     }
     
@@ -180,8 +181,13 @@ class Scrape {
         console.log("Finished scraping Waterloo Data...");
     }
 
-    torontoScrape() {
+    async torontoScrape() {
         console.log("Scraping Toronto Data...");
+        await this.getKijijiInfo("https://www.kijiji.ca/b-canada/student-housing-toronto/k0l0?dc=true&view=list");
+        await this.getPlaces4StudentsInfo("https://www.places4students.com/Places/PropertyListings?SchoolID=FzhtQRDGtSU%3d");
+
+        await this.browser.close();
+        console.log("Finished scraping Toronto data...");
     }
 
     hamiltonScrape() {

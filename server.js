@@ -51,14 +51,10 @@ class Scrape {
     }
 
     async initialize() {
-        this.browser = await puppeteer.launch({headless: true});
+        this.browser = await puppeteer.launch({headless: false});
         this.page = await this.browser.newPage();
         await this.page.setViewport({width: 1280, height: 800});
         eval(`this.${this.city}Scrape()`);
-    }
-
-    async getResultPages(searchPageLink) {
-
     }
 
     async getKijijiInfo(searchPageLink) {
@@ -95,10 +91,12 @@ class Scrape {
                 
             }
         }
+
         // Accessing all links
         for (const a of linksArr) {
             try {
                 await this.page.goto(a);
+                this.page.setDefaultNavigationTimeout(0);
 
                 // Getting listing title
                 const adTitle = (await this.page.$eval('.sc-9d9a3b6-0.cwhKRe', el => el.innerText)).trim();
@@ -192,7 +190,7 @@ class Scrape {
     async waterlooScrape() { //Kijiji, Places4Students
         console.log("Scraping Waterloo data...");  
         await this.getKijijiInfo("https://www.kijiji.ca/b-canada/student-housing-waterloo/k0l0?dc=true&view=list");
-        await this.getPlaces4StudentsInfo("https://www.places4students.com/Places/PropertyListings?SchoolID=j9CaTYeszhs=");
+        //await this.getPlaces4StudentsInfo("https://www.places4students.com/Places/PropertyListings?SchoolID=j9CaTYeszhs=");
         
         
 

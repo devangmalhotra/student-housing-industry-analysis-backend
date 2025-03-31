@@ -148,6 +148,7 @@ class Scrape {
             await this.page.goto(a);
 
             // Getting title
+            await this.page.waitForSelector("#MainContent_detailsTitle");
             listingTitle = await this.page.$eval("#MainContent_detailsTitle", el => el.innerText);
 
             // Getting price

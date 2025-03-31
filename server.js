@@ -203,7 +203,7 @@ class Scrape {
         console.log("Finished scraping Toronto data...");
     }
 
-    async hamiltonScrape() {
+    async hamiltonScrape() { //Kijiji, Places4Students
         console.log("Scraping Hamilton data...");
         
         await this.getKijijiInfo("https://www.kijiji.ca/b-canada/student-housing-hamilton/k0l0?dc=true&view=list");

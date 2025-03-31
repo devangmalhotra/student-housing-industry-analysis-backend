@@ -184,7 +184,8 @@ class Scrape {
     async torontoScrape() {
         console.log("Scraping Toronto Data...");
         await this.getKijijiInfo("https://www.kijiji.ca/b-canada/student-housing-toronto/k0l0?dc=true&view=list");
-        await this.getPlaces4StudentsInfo("https://www.places4students.com/Places/PropertyListings?SchoolID=FzhtQRDGtSU%3d");
+        await this.getPlaces4StudentsInfo("https://www.places4students.com/Places/PropertyListings?SchoolID=FzhtQRDGtSU%3d"); // University of Toronto
+        await this.getPlaces4StudentsInfo("https://www.places4students.com/Places/PropertyListings?SchoolID=8SnFMiLCDsA%3d"); // York University
 
         await this.browser.close();
         console.log("Finished scraping Toronto data...");

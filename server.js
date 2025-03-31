@@ -203,8 +203,11 @@ class Scrape {
         console.log("Finished scraping Toronto data...");
     }
 
-    hamiltonScrape() {
-        console.log("hamiltonScrape");
+    async hamiltonScrape() {
+        console.log("Scraping Hamilton data...");
+
+        await this.browser.close();
+        console.log("Finished scraping Hamilton data");
     }
 
     insertData(title, price, location, isFurnished, link, platform) {

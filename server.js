@@ -79,6 +79,7 @@ class Scrape {
         for (const a of linksArr) {
             try {
                 await this.page.goto(a);
+                await new Promise(r => setTimeout(r, 2000));
 
                 // Getting listing title
                 const adTitle = (await this.page.$eval('.sc-9d9a3b6-0.cwhKRe', el => el.innerText)).trim();
@@ -114,6 +115,9 @@ class Scrape {
                 console.log(e);
                 break;
             }
+
+            // Timeout before going to next link
+            await new Promise(r => setTimeout(r, 2000));
         }
 
         
@@ -149,6 +153,7 @@ class Scrape {
         // Traversing through each link
         for (const a of linksArr) {
             await this.page.goto(a);
+            await new Promise(r => setTimeout(r, 2000));
 
             // Getting title
             await this.page.waitForSelector("#MainContent_detailsTitle");
@@ -171,6 +176,9 @@ class Scrape {
             // Inserting into MySQL DB
             //this.insertData(listingTitle, listingPrice, listingLocation, listingIsFurnished, a, "Places4Students");
             console.log(listingTitle, listingPrice, listingLocation, listingIsFurnished, a, "Places4Students");
+
+            //Timeout
+            await new Promise(r => setTimeout(r, 2000));
         }
     }
     

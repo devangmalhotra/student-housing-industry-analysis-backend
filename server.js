@@ -184,10 +184,9 @@ class Scrape {
     
     async waterlooScrape() { //Kijiji, Places4Students
         console.log("Scraping Waterloo data...");  
+        
         await this.getKijijiInfo("https://www.kijiji.ca/b-canada/student-housing-waterloo/k0l0?dc=true&view=list");
         await this.getPlaces4StudentsInfo("https://www.places4students.com/Places/PropertyListings?SchoolID=j9CaTYeszhs=");
-        
-        
 
         await this.browser.close();
         console.log("Finished scraping Waterloo Data...");
@@ -195,6 +194,7 @@ class Scrape {
 
     async torontoScrape() {  //Kijiji, Places4Students
         console.log("Scraping Toronto Data...");
+        
         await this.getKijijiInfo("https://www.kijiji.ca/b-canada/student-housing-toronto/k0l0?dc=true&view=list");
         await this.getPlaces4StudentsInfo("https://www.places4students.com/Places/PropertyListings?SchoolID=FzhtQRDGtSU%3d"); // University of Toronto
         await this.getPlaces4StudentsInfo("https://www.places4students.com/Places/PropertyListings?SchoolID=8SnFMiLCDsA%3d"); // York University
@@ -205,6 +205,9 @@ class Scrape {
 
     async hamiltonScrape() {
         console.log("Scraping Hamilton data...");
+        
+        await this.getKijijiInfo("https://www.kijiji.ca/b-canada/student-housing-hamilton/k0l0?dc=true&view=list");
+        await this.getPlaces4StudentsInfo("https://www.places4students.com/Places/PropertyListings?SchoolID=pCzm%2fnN3qvQ%3d");
 
         await this.browser.close();
         console.log("Finished scraping Hamilton data");

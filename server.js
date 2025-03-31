@@ -60,23 +60,6 @@ class Scrape {
     async getKijijiInfo(searchPageLink) {
         let linksArr = [];
         await this.page.goto(searchPageLink);
-
-        // Scrolling to bottom of page to load elements
-        await this.page.evaluate('window.scrollTo(0, document.body.scrollHeight)');
-        
-        await this.page.waitForSelector('[data-testid="pagination-list-item-selected"]');
-
-        // Collecting links for all pages
-        const resultLinksContainers = await this.page.$$('[data-testid=pagination-list-item]');
-
-        // Saving all result page links in an array
-        const resultLinks = [];
-        for (const i of resultLinksContainers) {
-            const resultLink = await i.$eval('[data-testid=pagination-link-item]', el => el.href);
-            resultLinks.push(resultLink);
-        };
-        console.log(resultLinks);
-        //console.log(await resultLinksContainers[0].$eval('[data-testid=pagination-link-item]', el => el.href));
         
         // Collecting all links
         const adsResultsDiv = await this.page.$('[data-testid=srp-search-list]');
@@ -96,7 +79,6 @@ class Scrape {
         for (const a of linksArr) {
             try {
                 await this.page.goto(a);
-                this.page.setDefaultNavigationTimeout(0);
 
                 // Getting listing title
                 const adTitle = (await this.page.$eval('.sc-9d9a3b6-0.cwhKRe', el => el.innerText)).trim();
@@ -190,7 +172,7 @@ class Scrape {
     async waterlooScrape() { //Kijiji, Places4Students
         console.log("Scraping Waterloo data...");  
         await this.getKijijiInfo("https://www.kijiji.ca/b-canada/student-housing-waterloo/k0l0?dc=true&view=list");
-        //await this.getPlaces4StudentsInfo("https://www.places4students.com/Places/PropertyListings?SchoolID=j9CaTYeszhs=");
+        await this.getPlaces4StudentsInfo("https://www.places4students.com/Places/PropertyListings?SchoolID=j9CaTYeszhs=");
         
         
 
@@ -199,7 +181,7 @@ class Scrape {
     }
 
     torontoScrape() {
-        console.log("torontoScrape");
+        console.log("Scraping Toronto Data...");
     }
 
     hamiltonScrape() {

@@ -189,7 +189,7 @@ class Scrape {
         await this.getPlaces4StudentsInfo("https://www.places4students.com/Places/PropertyListings?SchoolID=j9CaTYeszhs=");
 
         await this.browser.close();
-        console.log("Finished scraping Waterloo Data...");
+        console.log("Finished scraping Waterloo data...");
     }
 
     async torontoScrape() {  //Kijiji, Places4Students

@@ -184,6 +184,9 @@ class Scrape {
     
     async waterlooScrape() { //Kijiji, Places4Students
         console.log("Scraping Waterloo data...");  
+
+        // Deleting old data from db
+        
         
         await this.getKijijiInfo("https://www.kijiji.ca/b-canada/student-housing-waterloo/k0l0?dc=true&view=list");
         await this.getPlaces4StudentsInfo("https://www.places4students.com/Places/PropertyListings?SchoolID=j9CaTYeszhs=");

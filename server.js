@@ -202,6 +202,14 @@ class Scrape {
 
     async torontoScrape() {  //Kijiji, Places4Students
         console.log("Scraping Toronto data...");
+
+        // Deleting old data from db
+        console.log("Deleting old data...")
+        const sql = 'DELETE FROM `advertisements` WHERE `location` LIKE "Toronto%" OR `location` LIKE "%Toronto" OR `location` LIKE "%Toronto%" OR `location` LIKE "Toronto"';
+        con.query(sql, (err, result) => {
+            if (err) throw err;
+            console.log("Finished deleting old data...")
+        });
         
         await this.getKijijiInfo("https://www.kijiji.ca/b-canada/student-housing-toronto/k0l0?dc=true&view=list");
         await this.getPlaces4StudentsInfo("https://www.places4students.com/Places/PropertyListings?SchoolID=FzhtQRDGtSU%3d"); // University of Toronto

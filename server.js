@@ -186,6 +186,9 @@ class Scrape {
         console.log("Scraping Waterloo data...");  
 
         // Deleting old data from db
+        console.log("Deleting old data...")
+        const sql = 'DROP FROM `advertisements WHERE "Waterloo" IN LOCATION`';
+        console.log("Finished deleting old data...")
         
         
         await this.getKijijiInfo("https://www.kijiji.ca/b-canada/student-housing-waterloo/k0l0?dc=true&view=list");

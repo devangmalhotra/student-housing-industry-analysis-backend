@@ -187,9 +187,11 @@ class Scrape {
 
         // Deleting old data from db
         console.log("Deleting old data...")
-        const sql = 'DROP FROM `advertisements WHERE "Waterloo" IN LOCATION`';
-        console.log("Finished deleting old data...")
-        
+        const sql = 'DELETE FROM `advertisements` WHERE `location` LIKE "Waterloo%" OR `location` LIKE "%Waterloo" OR `location` LIKE "%Waterloo%" OR `location` LIKE "Waterloo" OR `location` LIKE "Kitchener%" OR `location` LIKE "%Kitchener" OR `location` LIKE "%Kitchener%" OR `location` LIKE "Kitchener" OR `location` LIKE "Cambridge%" OR `location` LIKE "%Cambridge" OR `location` LIKE "%Cambridge%" OR `location` LIKE "Cambridge"';
+        con.query(sql, (err, result) => {
+            if (err) throw err;
+            console.log("Finished deleting old data...")
+        });
         
         await this.getKijijiInfo("https://www.kijiji.ca/b-canada/student-housing-waterloo/k0l0?dc=true&view=list");
         await this.getPlaces4StudentsInfo("https://www.places4students.com/Places/PropertyListings?SchoolID=j9CaTYeszhs=");

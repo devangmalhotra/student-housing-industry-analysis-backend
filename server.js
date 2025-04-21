@@ -198,6 +198,8 @@ class Scrape {
 
         await this.browser.close();
         console.log("Finished scraping Waterloo data...");*/
+        searchTerms = ["Waterloo", "Kitchener", "Cambridge"];
+        this.calculate(searchTerms);
 
     }
 
@@ -246,7 +248,7 @@ class Scrape {
         });
     }
 
-    calculate(city) {
+    calculate(searchTerms) {
         
     }
 }

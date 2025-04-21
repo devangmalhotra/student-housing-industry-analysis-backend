@@ -183,7 +183,7 @@ class Scrape {
     }
     
     async waterlooScrape() { //Kijiji, Places4Students
-        console.log("Scraping Waterloo data...");  
+        /*console.log("Scraping Waterloo data...");  
 
         // Deleting old data from db
         console.log("Deleting old data...")
@@ -197,7 +197,8 @@ class Scrape {
         await this.getPlaces4StudentsInfo("https://www.places4students.com/Places/PropertyListings?SchoolID=j9CaTYeszhs=");
 
         await this.browser.close();
-        console.log("Finished scraping Waterloo data...");
+        console.log("Finished scraping Waterloo data...");*/
+
     }
 
     async torontoScrape() {  //Kijiji, Places4Students
@@ -245,7 +246,7 @@ class Scrape {
         });
     }
 
-    calculate() {
+    calculate(city) {
         
     }
 }

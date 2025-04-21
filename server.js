@@ -244,5 +244,9 @@ class Scrape {
             console.log(`Inserted ${platform} ${title}`);
         });
     }
+
+    calculate() {
+        
+    }
 }
 

@@ -251,7 +251,7 @@ class Scrape {
     calculateTotalListings(searchTerms) {
         for (const city of searchTerms) {
             const adObjects = [];
-            const sql = `SELECT price FROM advertisements WHERE location LIKE '${city}%'`
+            const sql = `SELECT count(*) FROM advertisements WHERE location LIKE '${city}%'`
             con.query(sql, (err, results, fields) => {
                 if (err) throw err;
                 console.log(results);

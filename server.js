@@ -198,7 +198,7 @@ class Scrape {
 
         await this.browser.close();
         console.log("Finished scraping Waterloo data...");*/
-        searchTerms = ["Waterloo", "Kitchener", "Cambridge"];
+        const searchTerms = ["Waterloo", "Kitchener", "Cambridge"];
         this.calculate(searchTerms);
 
     }
@@ -249,7 +249,13 @@ class Scrape {
     }
 
     calculate(searchTerms) {
-        
+        for (const city of searchTerms) {
+            const adObjects = [];
+            const sql = `SELECT * FROM advertisements WHERE location LIKE '${city}%'`
+            con.query(sql, (err, results, fields) => {
+                if (err) throw err;
+                console.log(results);
+            });
+        }
     }
 }
-

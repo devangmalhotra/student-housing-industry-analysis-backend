@@ -248,13 +248,16 @@ class Scrape {
         });
     }
 
-    calculateTotalListings(searchTerms) {
+    async calculateTotalListings(searchTerms) {
+        let adObjects = [];
         for (const city of searchTerms) {
-            const adObjects = [];
             const sql = `SELECT * FROM advertisements WHERE location LIKE '${city}%' or location like '%${city}' or location like '%${city}%'`
-            con.query(sql, (err, results, fields) => {
+            con.query(sql, async (err, results, fields) => {
                 if (err) throw err;
-                results = JSON.parse(JSON.stringify(results)); // arr of ad objects
+                results = await JSON.parse(JSON.stringify(results)); // arr of ad objects
+                for (const i of results) {
+                    adObjects.push(i);
+                }
             });
         }
     }

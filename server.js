@@ -199,7 +199,7 @@ class Scrape {
         await this.browser.close();
         console.log("Finished scraping Waterloo data...");*/
         const searchTerms = ["Waterloo", "Kitchener", "Cambridge"];
-        test = await this.calculateTotalListings(searchTerms);
+        const test = await this.calculateTotalListings(searchTerms);
         console.log(test);
 
     }
@@ -256,7 +256,7 @@ class Scrape {
             con.query(sql, async (err, results, fields) => {
                 if (err) throw err;
                 results = await JSON.parse(JSON.stringify(results)); // arr of ad objects
-                for (const i of results) {
+                for await (const i of results) {
                     adObjects.push(i);
                 }
             });

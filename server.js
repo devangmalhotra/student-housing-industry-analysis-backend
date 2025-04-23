@@ -199,7 +199,8 @@ class Scrape {
         await this.browser.close();
         console.log("Finished scraping Waterloo data...");*/
         const searchTerms = ["Waterloo", "Kitchener", "Cambridge"];
-        this.calculateTotalListings(searchTerms);
+        test = await this.calculateTotalListings(searchTerms);
+        console.log(test);
 
     }
 
@@ -260,5 +261,6 @@ class Scrape {
                 }
             });
         }
+        return adObjects
     }
 }

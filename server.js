@@ -273,8 +273,9 @@ class Scrape {
 }
 
 class Stats {
-    constructor(adObjects) {
+    constructor(adObjects, city) {
         this.adObjects = adObjects;
+        this.city = city;
         this.totalListings = null;
         this.averageRent = null;
         this.expensiveListing = null;
@@ -282,7 +283,7 @@ class Stats {
     }
 
     getTotalListings() {
-        console.log("test")
+        sql = 'select '
     }
 
 

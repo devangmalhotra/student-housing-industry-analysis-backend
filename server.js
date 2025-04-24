@@ -270,3 +270,9 @@ class Scrape {
         return adObjects;
     }
 }
+
+class Stats {
+    constructor(adObjects) {
+        this.adObjects = adObjects;
+    }
+}

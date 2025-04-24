@@ -199,9 +199,9 @@ class Scrape {
         await this.browser.close();
         console.log("Finished scraping Waterloo data...");*/
         const searchTerms = ["Waterloo", "Kitchener", "Cambridge"];
-        const adObjects = await this.calculateTotalListings(searchTerms);
-        console.log(adObjects);
-        statsObj = new Stats(adObjects);
+        const adObjects = await this.getAds(searchTerms);
+        const statsObj = new Stats(adObjects);
+        statsObj.getTotalListings();
 
     }
 
@@ -275,5 +275,15 @@ class Scrape {
 class Stats {
     constructor(adObjects) {
         this.adObjects = adObjects;
+        this.totalListings = null;
+        this.averageRent = null;
+        this.expensiveListing = null;
+        this.cheapestListing = null;
     }
+
+    getTotalListings() {
+        console.log("test")
+    }
+
+
 }

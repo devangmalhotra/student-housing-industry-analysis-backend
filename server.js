@@ -199,8 +199,9 @@ class Scrape {
         await this.browser.close();
         console.log("Finished scraping Waterloo data...");*/
         const searchTerms = ["Waterloo", "Kitchener", "Cambridge"];
-        const test = await this.calculateTotalListings(searchTerms);
-        console.log(test);
+        const adObjects = await this.calculateTotalListings(searchTerms);
+        console.log(adObjects);
+        statsObj = new Stats(adObjects);
 
     }
 

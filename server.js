@@ -251,12 +251,23 @@ class Scrape {
 
     async calculateTotalListings(searchTerms) {
         let adObjects = [];
+
+        // Promisify .query MySQL
+        const queryAsync = sql => {
+            return new Promise((resolve, reject) => {
+                con.query(sql, (err, results) => {
+                    if (err) return reject(err);
+                    resolve(JSON.parse(JSON.stringify(results)));
+                })
+            })
+        };
+
         for (const city of searchTerms) {
             const sql = `SELECT * FROM advertisements WHERE location LIKE '${city}%' or location like '%${city}' or location like '%${city}%'`
             con.query(sql, (err, results, fields) => {
                 if (err) throw err;
                 results = JSON.parse(JSON.stringify(results)); // arr of ad objects
-                for await (const i of results) {
+                for (const i of results) {
                     adObjects.push(i);
                     console.log(adObjects.length);
                 }

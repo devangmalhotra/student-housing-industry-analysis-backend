@@ -249,7 +249,7 @@ class Scrape {
         });
     }
 
-    async calculateTotalListings(searchTerms) {
+    async getAds(searchTerms) {
         let adObjects = [];
 
         // Promisify .query MySQL
@@ -264,16 +264,9 @@ class Scrape {
 
         for (const city of searchTerms) {
             const sql = `SELECT * FROM advertisements WHERE location LIKE '${city}%' or location like '%${city}' or location like '%${city}%'`
-            con.query(sql, (err, results, fields) => {
-                if (err) throw err;
-                results = JSON.parse(JSON.stringify(results)); // arr of ad objects
-                for (const i of results) {
-                    adObjects.push(i);
-                    console.log(adObjects.length);
-                }
-            });
+            const results = await queryAsync(sql);
+            adObjects.push(...results);
         }
-        console.log(adObjects.length)
-        return adObjects
+        return adObjects;
     }
 }

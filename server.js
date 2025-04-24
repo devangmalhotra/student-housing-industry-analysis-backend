@@ -253,14 +253,16 @@ class Scrape {
         let adObjects = [];
         for (const city of searchTerms) {
             const sql = `SELECT * FROM advertisements WHERE location LIKE '${city}%' or location like '%${city}' or location like '%${city}%'`
-            con.query(sql, async (err, results, fields) => {
+            con.query(sql, (err, results, fields) => {
                 if (err) throw err;
-                results = await JSON.parse(JSON.stringify(results)); // arr of ad objects
+                results = JSON.parse(JSON.stringify(results)); // arr of ad objects
                 for await (const i of results) {
                     adObjects.push(i);
+                    console.log(adObjects.length);
                 }
             });
         }
+        console.log(adObjects.length)
         return adObjects
     }
 }

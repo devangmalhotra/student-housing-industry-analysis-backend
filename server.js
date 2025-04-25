@@ -200,7 +200,7 @@ class Scrape {
         console.log("Finished scraping Waterloo data...");*/
         const searchTerms = ["Waterloo", "Kitchener", "Cambridge"];
         const adObjects = await this.getAds(searchTerms);
-        const statsObj = new Stats(adObjects);
+        const statsObj = new Stats(adObjects, 'Waterloo');
         statsObj.getTotalListings();
 
     }
@@ -283,7 +283,17 @@ class Stats {
     }
 
     getTotalListings() {
-        sql = 'select '
+        sql = 'select ';
+        
+        // Promisify .query MySQL
+        const queryAsync = sql => {
+            return new Promise((resolve, reject) => {
+                con.query(sql, (err, results) => {
+                    if (err) return reject(err);
+                    resolve(JSON.parse(JSON.stringify(results)));
+                })
+            })
+        };
     }
 
 

@@ -31,14 +31,6 @@ app.get("/scrape", (req, res) => {
     
 });
 
-app.get("/toronto", (req, res) => {
-    res.send({hello: 'hello world'});
-});
-
-app.get("/hamilton", (req, res) => {
-    res.send({hello: 'hello world'});
-});
-
 app.listen(8000, () => {
     console.log("Listening on port 8000...");
 });
@@ -320,6 +312,4 @@ class Stats {
         this.cheapestListing = results[0].min_rent;
         console.log(`Cheapest listing: $${this.cheapestListing}`);
     }
-
-
 }

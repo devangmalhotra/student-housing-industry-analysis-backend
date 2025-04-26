@@ -294,7 +294,7 @@ class Stats {
         };
         const sql = `SELECT count(*) as total_listings FROM advertisements WHERE location LIKE '${this.city}%' or location like '%${this.city}' or location like '%${this.city}%'`;
         const results = await queryAsync(sql);
-        console.log(results[0].total_listings);
+        this.totalListings = results[0].total_listings;
     }
 
 

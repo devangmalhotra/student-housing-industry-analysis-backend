@@ -283,38 +283,31 @@ class Stats {
         this.cheapestListing = null;
     }
 
-    async getTotalListings() {
-        // Promisify .query MySQL
-        const queryAsync = sql => {
-            return new Promise((resolve, reject) => {
-                con.query(sql, (err, results) => {
-                    if (err) return reject(err);
-                    resolve(results);
-                })
+    queryAsync(sql) { // Promisify .query MySQL
+        return new Promise((resolve, reject) => {
+            con.query(sql, (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
             })
-        };
-        
+        });
+    }
+
+    async getTotalListings() {
         const sql = `SELECT count(*) as total_listings FROM advertisements WHERE location LIKE '${this.city}%' or location like '%${this.city}' or location like '%${this.city}%'`;
-        const results = await queryAsync(sql);
+        const results = await this.queryAsync(sql);
         this.totalListings = results[0].total_listings;
         console.log(`Total listings: ${this.totalListings}`);
     }
 
     async getAverageRent() {
-        // Promisify .query MySQL
-        const queryAsync = sql => {
-            return new Promise((resolve, reject) => {
-                con.query(sql, (err, results) => {
-                    if (err) return reject(err);
-                    resolve(results);
-                })
-            })
-        };
-        
         const sql = `SELECT round(avg(price)) as avg_rent FROM advertisements WHERE location LIKE '${this.city}%' or location like '%${this.city}' or location like '%${this.city}%'`;
-        const results = await queryAsync(sql);
+        const results = await this.queryAsync(sql);
         this.averageRent = results[0].avg_rent;
         console.log(`Average rent: $${this.averageRent}`);
+    }
+
+    async getMostExpensiveRent() {
+
     }
 
 

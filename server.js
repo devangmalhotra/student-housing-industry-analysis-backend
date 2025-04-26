@@ -203,6 +203,7 @@ class Scrape {
         const statsObj = new Stats(adObjects, 'Waterloo');
         statsObj.getTotalListings();
         statsObj.getAverageRent();
+        statsObj.getMostExpensiveRent();
 
     }
 
@@ -311,6 +312,10 @@ class Stats {
         const results = await this.queryAsync(sql);
         this.expensiveListing = results[0].max_rent;
         console.log(`Most expensive listing: $${this.expensiveListing}`);
+    }
+
+    async getCheapestRent() {
+        
     }
 
 

@@ -307,7 +307,10 @@ class Stats {
     }
 
     async getMostExpensiveRent() {
-
+        const sql = `SELECT round(max(price)) as max_rent FROM advertisements WHERE location LIKE '${this.city}%' or location like '%${this.city}' or location like '%${this.city}%'`;
+        const results = await this.queryAsync(sql);
+        this.expensiveListing = results[0].max_rent;
+        console.log(`Most expensive listing: $${this.expensiveListing}`);
     }
 
 

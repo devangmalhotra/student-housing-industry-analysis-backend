@@ -202,6 +202,7 @@ class Scrape {
         const adObjects = await this.getAds(searchTerms);
         const statsObj = new Stats(adObjects, 'Waterloo');
         statsObj.getTotalListings();
+        statsObj.getAverageRent();
 
     }
 
@@ -292,13 +293,28 @@ class Stats {
                 })
             })
         };
+        
         const sql = `SELECT count(*) as total_listings FROM advertisements WHERE location LIKE '${this.city}%' or location like '%${this.city}' or location like '%${this.city}%'`;
         const results = await queryAsync(sql);
         this.totalListings = results[0].total_listings;
+        console.log(`Total listings: ${this.totalListings}`);
     }
 
     async getAverageRent() {
+        // Promisify .query MySQL
+        const queryAsync = sql => {
+            return new Promise((resolve, reject) => {
+                con.query(sql, (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results);
+                })
+            })
+        };
         
+        const sql = `SELECT round(avg(price)) as avg_rent FROM advertisements WHERE location LIKE '${this.city}%' or location like '%${this.city}' or location like '%${this.city}%'`;
+        const results = await queryAsync(sql);
+        this.averageRent = results[0].avg_rent;
+        console.log(`Average rent: $${this.averageRent}`);
     }
 
 

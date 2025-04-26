@@ -204,7 +204,7 @@ class Scrape {
         statsObj.getTotalListings();
         statsObj.getAverageRent();
         statsObj.getMostExpensiveRent();
-
+        statsObj.getCheapestRent();
     }
 
     async torontoScrape() {  //Kijiji, Places4Students
@@ -315,7 +315,10 @@ class Stats {
     }
 
     async getCheapestRent() {
-        
+        const sql = `SELECT round(min(price)) as min_rent FROM advertisements WHERE location LIKE '${this.city}%' or location like '%${this.city}' or location like '%${this.city}%' and price > 0`;
+        const results = await this.queryAsync(sql);
+        this.cheapestListing = results[0].min_rent;
+        console.log(`Cheapest listing: $${this.cheapestListing}`);
     }
 
 

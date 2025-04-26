@@ -297,5 +297,9 @@ class Stats {
         this.totalListings = results[0].total_listings;
     }
 
+    async getAverageRent() {
+        
+    }
+
 
 }

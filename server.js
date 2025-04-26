@@ -282,18 +282,19 @@ class Stats {
         this.cheapestListing = null;
     }
 
-    getTotalListings() {
-        sql = 'select ';
-        
+    async getTotalListings() {
         // Promisify .query MySQL
         const queryAsync = sql => {
             return new Promise((resolve, reject) => {
                 con.query(sql, (err, results) => {
                     if (err) return reject(err);
-                    resolve(JSON.parse(JSON.stringify(results)));
+                    resolve(results);
                 })
             })
         };
+        const sql = `SELECT count(*) as total_listings FROM advertisements WHERE location LIKE '${this.city}%' or location like '%${this.city}' or location like '%${this.city}%'`;
+        const results = await queryAsync(sql);
+        console.log(results[0].total_listings);
     }
 
 

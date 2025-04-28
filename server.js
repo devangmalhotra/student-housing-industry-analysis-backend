@@ -197,7 +197,12 @@ class Scrape {
         statsObj.getAverageRent();
         statsObj.getMostExpensiveRent();
         statsObj.getCheapestRent();
-        const payload = {};
+        const payload = {
+            'totalListings': statsObj.totalListings, 
+            'getAverageRent': statsObj.averageRent,
+            'mostExpensiveRent': statsObj.expensiveListing,
+            'cheapestRent': statsObj.cheapestListing,
+        };
     }
 
     async torontoScrape() {  //Kijiji, Places4Students

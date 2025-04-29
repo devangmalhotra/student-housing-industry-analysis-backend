@@ -193,16 +193,17 @@ class Scrape {
         const searchTerms = ["Waterloo", "Kitchener", "Cambridge"];
         const adObjects = await this.getAds(searchTerms);
         const statsObj = new Stats(adObjects, 'Waterloo');
-        statsObj.getTotalListings();
-        statsObj.getAverageRent();
-        statsObj.getMostExpensiveRent();
-        statsObj.getCheapestRent();
+        await statsObj.getTotalListings();
+        await statsObj.getAverageRent();
+        await statsObj.getMostExpensiveRent();
+        await statsObj.getCheapestRent();
         const payload = {
             'totalListings': statsObj.totalListings, 
             'getAverageRent': statsObj.averageRent,
             'mostExpensiveRent': statsObj.expensiveListing,
             'cheapestRent': statsObj.cheapestListing,
         };
+        console.log(payload);
     }
 
     async torontoScrape() {  //Kijiji, Places4Students
@@ -295,27 +296,23 @@ class Stats {
         const sql = `SELECT count(*) as total_listings FROM advertisements WHERE location LIKE '${this.city}%' or location like '%${this.city}' or location like '%${this.city}%'`;
         const results = await this.queryAsync(sql);
         this.totalListings = results[0].total_listings;
-        console.log(`Total listings: ${this.totalListings}`);
     }
 
     async getAverageRent() {
         const sql = `SELECT round(avg(price)) as avg_rent FROM advertisements WHERE location LIKE '${this.city}%' or location like '%${this.city}' or location like '%${this.city}%'`;
         const results = await this.queryAsync(sql);
         this.averageRent = results[0].avg_rent;
-        console.log(`Average rent: $${this.averageRent}`);
     }
 
     async getMostExpensiveRent() {
         const sql = `SELECT round(max(price)) as max_rent FROM advertisements WHERE location LIKE '${this.city}%' or location like '%${this.city}' or location like '%${this.city}%'`;
         const results = await this.queryAsync(sql);
         this.expensiveListing = results[0].max_rent;
-        console.log(`Most expensive listing: $${this.expensiveListing}`);
     }
 
     async getCheapestRent() {
         const sql = `SELECT round(min(price)) as min_rent FROM advertisements WHERE location LIKE '${this.city}%' or location like '%${this.city}' or location like '%${this.city}%' and price > 0`;
         const results = await this.queryAsync(sql);
         this.cheapestListing = results[0].min_rent;
-        console.log(`Cheapest listing: $${this.cheapestListing}`);
     }
 }

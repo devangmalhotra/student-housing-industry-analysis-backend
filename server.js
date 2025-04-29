@@ -47,7 +47,7 @@ class Scrape {
         this.page = await this.browser.newPage();
         await this.page.setViewport({width: 1280, height: 800});
         const payload = await eval(`this.${this.city}Scrape()`);
-        console.log(payload)
+        return payload;
     }
 
     async getKijijiInfo(searchPageLink) {

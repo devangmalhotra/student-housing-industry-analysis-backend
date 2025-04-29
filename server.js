@@ -46,7 +46,8 @@ class Scrape {
         this.browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox','--single-process', '--no-zygote'], ignoreHTTPSErrors: true });
         this.page = await this.browser.newPage();
         await this.page.setViewport({width: 1280, height: 800});
-        eval(`this.${this.city}Scrape()`);
+        const payload = await eval(`this.${this.city}Scrape()`);
+        console.log(payload)
     }
 
     async getKijijiInfo(searchPageLink) {
@@ -203,7 +204,7 @@ class Scrape {
             'mostExpensiveRent': statsObj.expensiveListing,
             'cheapestRent': statsObj.cheapestListing,
         };
-        console.log(payload);
+        return payload;
     }
 
     async torontoScrape() {  //Kijiji, Places4Students

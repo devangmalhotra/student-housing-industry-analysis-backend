@@ -20,14 +20,13 @@ con.connect(function(err) {
 });
 
 
-app.get("/scrape", (req, res) => {
+app.get("/scrape", async (req, res) => {
     const cityJson = req.query;
     const cityToScrape = cityJson.city;
-    //console.log(cityToScrape);
-    res.send({hello: 'hello world'});
-    
+    //console.log(cityToScrape);    
     const scrapeObj = new Scrape(cityToScrape);
-    scrapeObj.initialize();
+    payload = await scrapeObj.initialize();
+    res.send(payload);
     
 });
 

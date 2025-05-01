@@ -7,7 +7,9 @@ const mysql = require('mysql');
 app.use(cors());
 
 //Create connection with mysql database (id, title, price, location, isFurnished, link)
-let payload = {};
+let waterlooPayload = {};
+let hamiltonPayload = {};
+let torontoPayload = {};
 
 const con = mysql.createConnection({
     host: 'sql12.freesqldatabase.com', 
@@ -22,15 +24,16 @@ con.connect(function(err) {
 });
 
 app.get("/lastupdatedresult", (req, res) => {
-    res.send(payload);
+    eval(`res.send(waterlooPayload)`);
 });
 
 app.get("/scrape", async (req, res) => {
     const cityJson = req.query;
     const cityToScrape = cityJson.city; 
     const scrapeObj = new Scrape(cityToScrape);
-    payload = await scrapeObj.initialize();
-    res.send(payload);
+    resultPayload = await scrapeObj.initialize();
+    eval(`waterlooPayload = resultPayload`);
+    eval(`res.send(waterlooPayload)`);
 });
 
 app.listen(8000, () => {
@@ -48,7 +51,7 @@ class Scrape {
         this.browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox','--single-process', '--no-zygote'], ignoreHTTPSErrors: true });
         this.page = await this.browser.newPage();
         await this.page.setViewport({width: 1280, height: 800});
-        payload = await eval(`this.${this.city}Scrape()`);
+        const payload = await eval(`this.${this.city}Scrape()`);
         return payload;
     }
 
@@ -193,7 +196,6 @@ class Scrape {
 
         await this.browser.close();
         console.log("Finished scraping Waterloo data...");*/
-        console.log("test");
         const searchTerms = ["Waterloo", "Kitchener", "Cambridge"];
         const adObjects = await this.getAds(searchTerms);
         const statsObj = new Stats(adObjects, 'Waterloo');
@@ -201,7 +203,7 @@ class Scrape {
         await statsObj.getAverageRent();
         await statsObj.getMostExpensiveRent();
         await statsObj.getCheapestRent();
-        payload = {
+        const payload = {
             'totalListings': statsObj.totalListings, 
             'averageRent': statsObj.averageRent,
             'mostExpensiveRent': statsObj.expensiveListing,

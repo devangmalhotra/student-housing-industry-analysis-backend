@@ -190,6 +190,7 @@ class Scrape {
 
         await this.browser.close();
         console.log("Finished scraping Waterloo data...");*/
+        console.log("test");
         const searchTerms = ["Waterloo", "Kitchener", "Cambridge"];
         const adObjects = await this.getAds(searchTerms);
         const statsObj = new Stats(adObjects, 'Waterloo');
@@ -199,7 +200,7 @@ class Scrape {
         await statsObj.getCheapestRent();
         const payload = {
             'totalListings': statsObj.totalListings, 
-            'getAverageRent': statsObj.averageRent,
+            'averageRent': statsObj.averageRent,
             'mostExpensiveRent': statsObj.expensiveListing,
             'cheapestRent': statsObj.cheapestListing,
         };

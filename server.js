@@ -19,6 +19,9 @@ con.connect(function(err) {
     console.log("Connected to MySQL server!");
 });
 
+app.get("/lastupdatedresult", (req, res) => {
+
+});
 
 app.get("/scrape", async (req, res) => {
     const cityJson = req.query;
@@ -27,7 +30,6 @@ app.get("/scrape", async (req, res) => {
     const scrapeObj = new Scrape(cityToScrape);
     payload = await scrapeObj.initialize();
     res.send(payload);
-    
 });
 
 app.listen(8000, () => {

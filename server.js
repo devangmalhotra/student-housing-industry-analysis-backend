@@ -32,8 +32,8 @@ app.get("/scrape", async (req, res) => {
     const cityToScrape = cityJson.city; 
     const scrapeObj = new Scrape(cityToScrape);
     resultPayload = await scrapeObj.initialize();
-    eval(`waterlooPayload = resultPayload`);
-    eval(`res.send(waterlooPayload)`);
+    eval(`${cityToScrape}Payload = resultPayload`);
+    eval(`res.send(${cityToScrape}Payload)`);
 });
 
 app.listen(8000, () => {

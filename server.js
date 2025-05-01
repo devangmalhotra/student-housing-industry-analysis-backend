@@ -24,7 +24,9 @@ con.connect(function(err) {
 });
 
 app.get("/lastupdatedresult", (req, res) => {
-    eval(`res.send(waterlooPayload)`);
+    const cityJson = req.query;
+    const cityToScrape = cityJson.city; 
+    eval(`res.send(${cityToScrape}Payload)`);
 });
 
 app.get("/scrape", async (req, res) => {

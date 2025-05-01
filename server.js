@@ -7,6 +7,8 @@ const mysql = require('mysql');
 app.use(cors());
 
 //Create connection with mysql database (id, title, price, location, isFurnished, link)
+let payload = {};
+
 const con = mysql.createConnection({
     host: 'sql12.freesqldatabase.com', 
     user: 'sql12768879', 
@@ -20,13 +22,12 @@ con.connect(function(err) {
 });
 
 app.get("/lastupdatedresult", (req, res) => {
-
+    res.send(payload);
 });
 
 app.get("/scrape", async (req, res) => {
     const cityJson = req.query;
-    const cityToScrape = cityJson.city;
-    //console.log(cityToScrape);    
+    const cityToScrape = cityJson.city; 
     const scrapeObj = new Scrape(cityToScrape);
     payload = await scrapeObj.initialize();
     res.send(payload);
@@ -47,7 +48,7 @@ class Scrape {
         this.browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox','--single-process', '--no-zygote'], ignoreHTTPSErrors: true });
         this.page = await this.browser.newPage();
         await this.page.setViewport({width: 1280, height: 800});
-        const payload = await eval(`this.${this.city}Scrape()`);
+        payload = await eval(`this.${this.city}Scrape()`);
         return payload;
     }
 
@@ -200,7 +201,7 @@ class Scrape {
         await statsObj.getAverageRent();
         await statsObj.getMostExpensiveRent();
         await statsObj.getCheapestRent();
-        const payload = {
+        payload = {
             'totalListings': statsObj.totalListings, 
             'averageRent': statsObj.averageRent,
             'mostExpensiveRent': statsObj.expensiveListing,

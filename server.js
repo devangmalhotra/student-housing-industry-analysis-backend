@@ -249,7 +249,7 @@ class Scrape {
     }
 
     async hamiltonScrape() { //Kijiji, Places4Students
-        /* console.log("Scraping Hamilton data...");
+        console.log("Scraping Hamilton data...");
 
         // Deleting old data from db
         console.log("Deleting old data...")
@@ -264,14 +264,6 @@ class Scrape {
 
         await this.browser.close();
         console.log("Finished scraping Hamilton data");
-    }
-
-    insertData(title, price, location, isFurnished, link, platform) {
-        const sql = 'INSERT INTO `advertisements` (`title`, `price`, `location`, `isfurnished`, `link`) VALUES (?, ?, ?, ?, ?)';
-        con.query(sql, [title, price, location, isFurnished, link], (err, results, fields) => {
-            if (err) throw err;
-            console.log(`Inserted ${platform} ${title}`);
-        }); */
 
         const searchTerms = ["Hamilton"];
         const adObjects = await this.getAds(searchTerms);
@@ -287,6 +279,16 @@ class Scrape {
             'cheapestRent': statsObj.cheapestListing,
         };
         return payload;
+    }
+
+    insertData(title, price, location, isFurnished, link, platform) {
+        if (Number(price) <= 5000) {
+            const sql = 'INSERT INTO `advertisements` (`title`, `price`, `location`, `isfurnished`, `link`) VALUES (?, ?, ?, ?, ?)';
+            con.query(sql, [title, price, location, isFurnished, link], (err, results, fields) => {
+                if (err) throw err;
+                console.log(`Inserted ${platform} ${title}`);
+        }); 
+        }
     }
 
     async getAds(searchTerms) {

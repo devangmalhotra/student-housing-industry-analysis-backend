@@ -23,17 +23,19 @@ con.connect(function(err) {
     console.log("Connected to MySQL server!");
 });
 
-app.get("/lastupdatedresult", (req, res) => {
+app.get("/lastupdatedresult", async (req, res) => {
     const cityJson = req.query;
     const cityToScrape = cityJson.city; 
-    //eval(`res.send(${cityToScrape}Payload)`);
-    res.send({waterlooPayload, hamiltonPayload, torontoPayload});
+    const scrapeObj = new Scrape(cityToScrape, false);
+    const payload = await scrapeObj.initialize();
+    console.log(payload);
+    res.send(payload);
 });
 
 app.get("/scrape", async (req, res) => {
     const cityJson = req.query;
     const cityToScrape = cityJson.city; 
-    const scrapeObj = new Scrape(cityToScrape);
+    const scrapeObj = new Scrape(cityToScrape, true);
     const payload = await scrapeObj.initialize();
     console.log(payload);
     res.send(payload);
@@ -48,8 +50,9 @@ app.listen(8000, () => {
 });
 
 class Scrape {
-    constructor(city) {
+    constructor(city, grabNewData) {
         this.city = city;
+        this.grabNewData = grabNewData;
         this.browser = null;
         this.page = null;
     }
@@ -187,7 +190,7 @@ class Scrape {
     }
     
     async waterlooScrape() { //Kijiji, Places4Students
-        /*console.log("Scraping Waterloo data...");  
+        console.log("Scraping Waterloo data...");  
 
         // Deleting old data from db
         console.log("Deleting old data...")
@@ -201,16 +204,18 @@ class Scrape {
         await this.getPlaces4StudentsInfo("https://www.places4students.com/Places/PropertyListings?SchoolID=j9CaTYeszhs=");
 
         await this.browser.close();
-        console.log("Finished scraping Waterloo data...");*/
+        console.log("Finished scraping Waterloo data...");
         const searchTerms = ["Waterloo", "Kitchener", "Cambridge"];
         const adObjects = await this.getAds(searchTerms);
         const statsObj = new Stats(adObjects, 'Waterloo');
-        await statsObj.getTotalListings();
-        await statsObj.getAverageRent();
-        await statsObj.getMostExpensiveRent();
-        await statsObj.getCheapestRent();
-        statsObj.deleteOldStat();
-        statsObj.insertNewStat();
+        if (this.grabNewData) {
+            await statsObj.getTotalListings();
+            await statsObj.getAverageRent();
+            await statsObj.getMostExpensiveRent();
+            await statsObj.getCheapestRent();
+            statsObj.deleteOldStat();
+            statsObj.insertNewStat();
+        }
         const payload = await statsObj.getStat();
         return payload;
     }
@@ -231,7 +236,7 @@ class Scrape {
         await this.getPlaces4StudentsInfo("https://www.places4students.com/Places/PropertyListings?SchoolID=8SnFMiLCDsA%3d"); // York University
 
         await this.browser.close();
-        console.log("Finished scraping Toronto data..."); 
+        console.log("Finished scraping Toronto data...");
         const searchTerms = ["Toronto"];
         const adObjects = await this.getAds(searchTerms);
         const statsObj = new Stats(adObjects, 'Toronto');
@@ -239,19 +244,16 @@ class Scrape {
         await statsObj.getAverageRent();
         await statsObj.getMostExpensiveRent();
         await statsObj.getCheapestRent();
-        const payload = {
-            'totalListings': statsObj.totalListings, 
-            'averageRent': statsObj.averageRent,
-            'mostExpensiveRent': statsObj.expensiveListing,
-            'cheapestRent': statsObj.cheapestListing,
-        };
+        statsObj.deleteOldStat();
+        statsObj.insertNewStat();
+        const payload = await statsObj.getStat();
         return payload;
     }
 
     async hamiltonScrape() { //Kijiji, Places4Students
         console.log("Scraping Hamilton data...");
 
-        /*// Deleting old data from db
+        // Deleting old data from db
         console.log("Deleting old data...")
         const sql = 'DELETE FROM `advertisements` WHERE `location` LIKE "Hamilton%" OR `location` LIKE "%Hamilton" OR `location` LIKE "%Hamilton%" OR `location` LIKE "Hamilton"';
         con.query(sql, (err, result) => {
@@ -263,7 +265,7 @@ class Scrape {
         await this.getPlaces4StudentsInfo("https://www.places4students.com/Places/PropertyListings?SchoolID=pCzm%2fnN3qvQ%3d");
 
         await this.browser.close();
-        console.log("Finished scraping Hamilton data");*/
+        console.log("Finished scraping Hamilton data");
 
         const searchTerms = ["Hamilton"];
         const adObjects = await this.getAds(searchTerms);
@@ -272,12 +274,9 @@ class Scrape {
         await statsObj.getAverageRent();
         await statsObj.getMostExpensiveRent();
         await statsObj.getCheapestRent();
-        const payload = {
-            'totalListings': statsObj.totalListings, 
-            'averageRent': statsObj.averageRent,
-            'mostExpensiveRent': statsObj.expensiveListing,
-            'cheapestRent': statsObj.cheapestListing,
-        };
+        statsObj.deleteOldStat();
+        statsObj.insertNewStat();
+        const payload = await statsObj.getStat();
         return payload;
     }
 

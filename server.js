@@ -34,19 +34,7 @@ app.get("/scrape", async (req, res) => {
     const cityJson = req.query;
     const cityToScrape = cityJson.city; 
     const scrapeObj = new Scrape(cityToScrape);
-    resultPayload = await scrapeObj.initialize();
-
-    const deleteSql = `DELETE FROM citystatinfo WHERE city = '${cityToScrape}'`;
-    con.query(deleteSql, (err, result) => {
-        if (err) throw err;
-        console.log(`Finished deleting old ${cityToScrape} stats...`)
-    });
-
-    const insertSql = 'INSERT INTO `citystatinfo` (`city`, `total-listings`, `average-rent`, `most-expensive-rent`, `cheapest-rent`) VALUES (?, ?, ?, ?, ?)';
-    con.query(insertSql, [cityToScrape, resultPayload.totalListings, resultPayload.averageRent, resultPayload.mostExpensiveRent, resultPayload.cheapestRent], (err, results, fields) => {
-        if (err) throw err;
-        console.log(`Inserted new ${cityToScrape} stats...`);
-    }); 
+    await scrapeObj.initialize();
 
 
     /* console.log(resultPayload);
@@ -69,8 +57,7 @@ class Scrape {
         this.browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox','--single-process', '--no-zygote'], ignoreHTTPSErrors: true });
         this.page = await this.browser.newPage();
         await this.page.setViewport({width: 1280, height: 800});
-        const payload = await eval(`this.${this.city}Scrape()`);
-        return payload;
+        await eval(`this.${this.city}Scrape()`);
     }
 
     async getKijijiInfo(searchPageLink) {
@@ -221,13 +208,8 @@ class Scrape {
         await statsObj.getAverageRent();
         await statsObj.getMostExpensiveRent();
         await statsObj.getCheapestRent();
-        const payload = {
-            'totalListings': statsObj.totalListings, 
-            'averageRent': statsObj.averageRent,
-            'mostExpensiveRent': statsObj.expensiveListing,
-            'cheapestRent': statsObj.cheapestListing,
-        };
-        return payload;
+        statsObj.deleteOldStat();
+        statsObj.insertNewStat();
     }
 
     async torontoScrape() {  //Kijiji, Places4Students
@@ -381,9 +363,9 @@ class Stats {
 
     insertNewStat() {
         const insertSql = 'INSERT INTO `citystatinfo` (`city`, `total-listings`, `average-rent`, `most-expensive-rent`, `cheapest-rent`) VALUES (?, ?, ?, ?, ?)';
-        con.query(insertSql, [cityToScrape, resultPayload.totalListings, resultPayload.averageRent, resultPayload.mostExpensiveRent, resultPayload.cheapestRent], (err, results, fields) => {
+        con.query(insertSql, [this.city, this.totalListings, this.averageRent, this.expensiveListing, this.cheapestListing], (err, results, fields) => {
             if (err) throw err;
-            console.log(`Inserted new ${cityToScrape} stats...`);
+            console.log(`Inserted new ${this.city} stats...`);
         }); 
     }
 }

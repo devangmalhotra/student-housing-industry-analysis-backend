@@ -216,7 +216,7 @@ class Scrape {
     }
 
     async torontoScrape() {  //Kijiji, Places4Students
-        /* console.log("Scraping Toronto data...");
+        console.log("Scraping Toronto data...");
 
         // Deleting old data from db
         console.log("Deleting old data...")
@@ -231,7 +231,7 @@ class Scrape {
         await this.getPlaces4StudentsInfo("https://www.places4students.com/Places/PropertyListings?SchoolID=8SnFMiLCDsA%3d"); // York University
 
         await this.browser.close();
-        console.log("Finished scraping Toronto data..."); */
+        console.log("Finished scraping Toronto data..."); 
         const searchTerms = ["Toronto"];
         const adObjects = await this.getAds(searchTerms);
         const statsObj = new Stats(adObjects, 'Toronto');
@@ -251,7 +251,7 @@ class Scrape {
     async hamiltonScrape() { //Kijiji, Places4Students
         console.log("Scraping Hamilton data...");
 
-        // Deleting old data from db
+        /*// Deleting old data from db
         console.log("Deleting old data...")
         const sql = 'DELETE FROM `advertisements` WHERE `location` LIKE "Hamilton%" OR `location` LIKE "%Hamilton" OR `location` LIKE "%Hamilton%" OR `location` LIKE "Hamilton"';
         con.query(sql, (err, result) => {
@@ -263,7 +263,7 @@ class Scrape {
         await this.getPlaces4StudentsInfo("https://www.places4students.com/Places/PropertyListings?SchoolID=pCzm%2fnN3qvQ%3d");
 
         await this.browser.close();
-        console.log("Finished scraping Hamilton data");
+        console.log("Finished scraping Hamilton data");*/
 
         const searchTerms = ["Hamilton"];
         const adObjects = await this.getAds(searchTerms);

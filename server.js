@@ -7,9 +7,6 @@ const mysql = require('mysql');
 app.use(cors());
 
 //Create connection with mysql database (id, title, price, location, isFurnished, link)
-let waterlooPayload = {};
-let hamiltonPayload = {};
-let torontoPayload = {};
 
 const con = mysql.createConnection({
     host: 'sql12.freesqldatabase.com', 

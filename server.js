@@ -190,21 +190,23 @@ class Scrape {
     }
     
     async waterlooScrape() { //Kijiji, Places4Students
-        console.log("Scraping Waterloo data...");  
+        if (this.grabNewData) {
+            console.log("Scraping Waterloo data...");  
 
-        // Deleting old data from db
-        console.log("Deleting old data...")
-        const sql = 'DELETE FROM `advertisements` WHERE `location` LIKE "Waterloo%" OR `location` LIKE "%Waterloo" OR `location` LIKE "%Waterloo%" OR `location` LIKE "Waterloo" OR `location` LIKE "Kitchener%" OR `location` LIKE "%Kitchener" OR `location` LIKE "%Kitchener%" OR `location` LIKE "Kitchener" OR `location` LIKE "Cambridge%" OR `location` LIKE "%Cambridge" OR `location` LIKE "%Cambridge%" OR `location` LIKE "Cambridge"';
-        con.query(sql, (err, result) => {
-            if (err) throw err;
-            console.log("Finished deleting old data...")
-        });
-        
-        await this.getKijijiInfo("https://www.kijiji.ca/b-canada/student-housing-waterloo/k0l0?dc=true&view=list");
-        await this.getPlaces4StudentsInfo("https://www.places4students.com/Places/PropertyListings?SchoolID=j9CaTYeszhs=");
+            // Deleting old data from db
+            console.log("Deleting old data...")
+            const sql = 'DELETE FROM `advertisements` WHERE `location` LIKE "Waterloo%" OR `location` LIKE "%Waterloo" OR `location` LIKE "%Waterloo%" OR `location` LIKE "Waterloo" OR `location` LIKE "Kitchener%" OR `location` LIKE "%Kitchener" OR `location` LIKE "%Kitchener%" OR `location` LIKE "Kitchener" OR `location` LIKE "Cambridge%" OR `location` LIKE "%Cambridge" OR `location` LIKE "%Cambridge%" OR `location` LIKE "Cambridge"';
+            con.query(sql, (err, result) => {
+                if (err) throw err;
+                console.log("Finished deleting old data...")
+            });
+            
+            await this.getKijijiInfo("https://www.kijiji.ca/b-canada/student-housing-waterloo/k0l0?dc=true&view=list");
+            await this.getPlaces4StudentsInfo("https://www.places4students.com/Places/PropertyListings?SchoolID=j9CaTYeszhs=");
 
-        await this.browser.close();
-        console.log("Finished scraping Waterloo data...");
+            await this.browser.close();
+            console.log("Finished scraping Waterloo data...");
+        }
         const searchTerms = ["Waterloo", "Kitchener", "Cambridge"];
         const adObjects = await this.getAds(searchTerms);
         const statsObj = new Stats(adObjects, 'Waterloo');
@@ -221,61 +223,70 @@ class Scrape {
     }
 
     async torontoScrape() {  //Kijiji, Places4Students
-        console.log("Scraping Toronto data...");
+        if (this.grabNewData) {
+            console.log("Scraping Toronto data...");
 
-        // Deleting old data from db
-        console.log("Deleting old data...")
-        const sql = 'DELETE FROM `advertisements` WHERE `location` LIKE "Toronto%" OR `location` LIKE "%Toronto" OR `location` LIKE "%Toronto%" OR `location` LIKE "Toronto"';
-        con.query(sql, (err, result) => {
-            if (err) throw err;
-            console.log("Finished deleting old data...")
-        });
-        
-        await this.getKijijiInfo("https://www.kijiji.ca/b-canada/student-housing-toronto/k0l0?dc=true&view=list");
-        await this.getPlaces4StudentsInfo("https://www.places4students.com/Places/PropertyListings?SchoolID=FzhtQRDGtSU%3d"); // University of Toronto
-        await this.getPlaces4StudentsInfo("https://www.places4students.com/Places/PropertyListings?SchoolID=8SnFMiLCDsA%3d"); // York University
+            // Deleting old data from db
+            console.log("Deleting old data...")
+            const sql = 'DELETE FROM `advertisements` WHERE `location` LIKE "Toronto%" OR `location` LIKE "%Toronto" OR `location` LIKE "%Toronto%" OR `location` LIKE "Toronto"';
+            con.query(sql, (err, result) => {
+                if (err) throw err;
+                console.log("Finished deleting old data...")
+            });
+            
+            await this.getKijijiInfo("https://www.kijiji.ca/b-canada/student-housing-toronto/k0l0?dc=true&view=list");
+            await this.getPlaces4StudentsInfo("https://www.places4students.com/Places/PropertyListings?SchoolID=FzhtQRDGtSU%3d"); // University of Toronto
+            await this.getPlaces4StudentsInfo("https://www.places4students.com/Places/PropertyListings?SchoolID=8SnFMiLCDsA%3d"); // York University
 
-        await this.browser.close();
-        console.log("Finished scraping Toronto data...");
+            await this.browser.close();
+            console.log("Finished scraping Toronto data...");
+        }
+
         const searchTerms = ["Toronto"];
         const adObjects = await this.getAds(searchTerms);
         const statsObj = new Stats(adObjects, 'Toronto');
-        await statsObj.getTotalListings();
-        await statsObj.getAverageRent();
-        await statsObj.getMostExpensiveRent();
-        await statsObj.getCheapestRent();
-        statsObj.deleteOldStat();
-        statsObj.insertNewStat();
+        if (this.grabNewData) {
+            await statsObj.getTotalListings();
+            await statsObj.getAverageRent();
+            await statsObj.getMostExpensiveRent();
+            await statsObj.getCheapestRent();
+            statsObj.deleteOldStat();
+            statsObj.insertNewStat();
+        }
         const payload = await statsObj.getStat();
         return payload;
     }
 
     async hamiltonScrape() { //Kijiji, Places4Students
-        console.log("Scraping Hamilton data...");
+        if (this.grabNewData) {
+            console.log("Scraping Hamilton data...");
 
-        // Deleting old data from db
-        console.log("Deleting old data...")
-        const sql = 'DELETE FROM `advertisements` WHERE `location` LIKE "Hamilton%" OR `location` LIKE "%Hamilton" OR `location` LIKE "%Hamilton%" OR `location` LIKE "Hamilton"';
-        con.query(sql, (err, result) => {
-            if (err) throw err;
-            console.log("Finished deleting old data...")
-        });
-        
-        await this.getKijijiInfo("https://www.kijiji.ca/b-canada/student-housing-hamilton/k0l0?dc=true&view=list");
-        await this.getPlaces4StudentsInfo("https://www.places4students.com/Places/PropertyListings?SchoolID=pCzm%2fnN3qvQ%3d");
+            // Deleting old data from db
+            console.log("Deleting old data...")
+            const sql = 'DELETE FROM `advertisements` WHERE `location` LIKE "Hamilton%" OR `location` LIKE "%Hamilton" OR `location` LIKE "%Hamilton%" OR `location` LIKE "Hamilton"';
+            con.query(sql, (err, result) => {
+                if (err) throw err;
+                console.log("Finished deleting old data...")
+            });
+            
+            await this.getKijijiInfo("https://www.kijiji.ca/b-canada/student-housing-hamilton/k0l0?dc=true&view=list");
+            await this.getPlaces4StudentsInfo("https://www.places4students.com/Places/PropertyListings?SchoolID=pCzm%2fnN3qvQ%3d");
 
-        await this.browser.close();
-        console.log("Finished scraping Hamilton data");
+            await this.browser.close();
+            console.log("Finished scraping Hamilton data");
+        }
 
         const searchTerms = ["Hamilton"];
         const adObjects = await this.getAds(searchTerms);
         const statsObj = new Stats(adObjects, 'Hamilton');
-        await statsObj.getTotalListings();
-        await statsObj.getAverageRent();
-        await statsObj.getMostExpensiveRent();
-        await statsObj.getCheapestRent();
-        statsObj.deleteOldStat();
-        statsObj.insertNewStat();
+        if (this.grabNewData) {
+            await statsObj.getTotalListings();
+            await statsObj.getAverageRent();
+            await statsObj.getMostExpensiveRent();
+            await statsObj.getCheapestRent();
+            statsObj.deleteOldStat();
+            statsObj.insertNewStat();
+        }
         const payload = await statsObj.getStat();
         return payload;
     }

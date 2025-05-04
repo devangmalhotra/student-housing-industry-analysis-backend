@@ -35,8 +35,23 @@ app.get("/scrape", async (req, res) => {
     const cityToScrape = cityJson.city; 
     const scrapeObj = new Scrape(cityToScrape);
     resultPayload = await scrapeObj.initialize();
+
+    const deleteSql = `DELETE FROM citystatinfo WHERE city = '${cityToScrape}'`;
+    con.query(deleteSql, (err, result) => {
+        if (err) throw err;
+        console.log(`Finished deleting old ${cityToScrape} stats...`)
+    });
+
+    const insertSql = 'INSERT INTO `citystatinfo` (`city`, `total-listings`, `average-rent`, `most-expensive-rent`, `cheapest-rent`) VALUES (?, ?, ?, ?, ?)';
+    con.query(insertSql, [cityToScrape, resultPayload.totalListings, resultPayload.averageRent, resultPayload.mostExpensiveRent, resultPayload.cheapestRent], (err, results, fields) => {
+        if (err) throw err;
+        console.log(`Inserted new ${cityToScrape} stats...`);
+    }); 
+
+
+    /* console.log(resultPayload);
     eval(`${cityToScrape}Payload = resultPayload`);
-    res.send({waterlooPayload, hamiltonPayload, torontoPayload});
+    res.send({waterlooPayload, hamiltonPayload, torontoPayload}); */
 });
 
 app.listen(8000, () => {
@@ -354,5 +369,21 @@ class Stats {
         const sql = `SELECT round(min(price)) as min_rent FROM advertisements WHERE location LIKE '${this.city}%' or location like '%${this.city}' or location like '%${this.city}%' and price > 0`;
         const results = await this.queryAsync(sql);
         this.cheapestListing = results[0].min_rent;
+    }
+
+    deleteOldStat() {
+        const deleteSql = `DELETE FROM citystatinfo WHERE city = '${this.city}'`;
+        con.query(deleteSql, (err, result) => {
+            if (err) throw err;
+            console.log(`Finished deleting old ${this.city} stats...`)
+        });
+    }
+
+    insertNewStat() {
+        const insertSql = 'INSERT INTO `citystatinfo` (`city`, `total-listings`, `average-rent`, `most-expensive-rent`, `cheapest-rent`) VALUES (?, ?, ?, ?, ?)';
+        con.query(insertSql, [cityToScrape, resultPayload.totalListings, resultPayload.averageRent, resultPayload.mostExpensiveRent, resultPayload.cheapestRent], (err, results, fields) => {
+            if (err) throw err;
+            console.log(`Inserted new ${cityToScrape} stats...`);
+        }); 
     }
 }

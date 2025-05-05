@@ -213,7 +213,7 @@ class Scrape {
         }
         const specificPayload = await statsObj.getStat();
         const chartPayload = await statsObj.getAllCitiesAvgRent();
-        const payload = [ specificPayload, ...chartPayload ]
+        const payload = [ [specificPayload], ...[chartPayload] ]
         return payload;
     }
 
@@ -250,7 +250,7 @@ class Scrape {
         }
         const specificPayload = await statsObj.getStat();
         const chartPayload = await statsObj.getAllCitiesAvgRent();
-        const payload = [ specificPayload, ...chartPayload ]
+        const payload = [ [specificPayload], ...[chartPayload] ]
         return payload;
     }
 
@@ -286,7 +286,7 @@ class Scrape {
         }
         const specificPayload = await statsObj.getStat();
         const chartPayload = await statsObj.getAllCitiesAvgRent();
-        const payload = [ specificPayload, ...chartPayload ]
+        const payload = [ [specificPayload], ...[chartPayload] ]
         return payload;
     }
 

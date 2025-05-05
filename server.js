@@ -360,7 +360,8 @@ class Stats {
     }
 
     async getAllCitiesAvgRent() {
-        
+        const sql = `SELECT city, averagerent FROM citystatinfo`;
+        const results = this.queryAsync(sql);
     }
 
     deleteOldStat() {

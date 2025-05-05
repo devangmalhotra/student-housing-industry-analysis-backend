@@ -211,7 +211,9 @@ class Scrape {
             statsObj.deleteOldStat();
             statsObj.insertNewStat();
         }
-        const payload = await statsObj.getStat();
+        const specificPayload = await statsObj.getStat();
+        const chartPayload = await statsObj.getAllCitiesAvgRent();
+        const payload = [ specificPayload, ...chartPayload ]
         return payload;
     }
 
@@ -246,7 +248,9 @@ class Scrape {
             statsObj.deleteOldStat();
             statsObj.insertNewStat();
         }
-        const payload = await statsObj.getStat();
+        const specificPayload = await statsObj.getStat();
+        const chartPayload = await statsObj.getAllCitiesAvgRent();
+        const payload = [ specificPayload, ...chartPayload ]
         return payload;
     }
 
@@ -280,7 +284,9 @@ class Scrape {
             statsObj.deleteOldStat();
             statsObj.insertNewStat();
         }
-        const payload = await statsObj.getStat();
+        const specificPayload = await statsObj.getStat();
+        const chartPayload = await statsObj.getAllCitiesAvgRent();
+        const payload = [ specificPayload, ...chartPayload ]
         return payload;
     }
 
@@ -362,6 +368,7 @@ class Stats {
     async getAllCitiesAvgRent() {
         const sql = `SELECT city, averagerent FROM citystatinfo`;
         const results = this.queryAsync(sql);
+        return results;
     }
 
     deleteOldStat() {

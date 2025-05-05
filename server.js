@@ -6,6 +6,8 @@ const mysql = require('mysql');
 
 app.use(cors());
 
+const port = process.env.PORT || 8000;
+
 //Create connection with mysql database (id, title, price, location, isFurnished, link)
 
 const con = mysql.createConnection({
@@ -38,8 +40,8 @@ app.get("/scrape", async (req, res) => {
     res.send(payload);
 });
 
-app.listen(8000, () => {
-    console.log("Listening on port 8000...");
+app.listen(port, () => {
+    console.log(`Listening on port ${port}...`);
 });
 
 class Scrape {
